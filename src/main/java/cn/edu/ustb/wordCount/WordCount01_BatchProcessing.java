@@ -9,6 +9,9 @@ import org.apache.flink.api.java.operators.UnsortedGrouping;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Collector;
 
+/**
+ * 演示现在已经过时了的批处理的写法 - 处理有界数据流
+ */
 public class WordCount01_BatchProcessing {
     public static void main(String[] args) throws Exception {
         //TODO 1.创建执行环境
