@@ -16,7 +16,7 @@ public class WordCount03_DealWithSocket {
         env.setParallelism(env.getParallelism());
 
         //TODO 2.读取数据流
-        final DataStreamSource<String> socketDS = env.socketTextStream("Hadoop130", 7777);
+        final DataStreamSource<String> socketDS = env.socketTextStream("Hadoop132", 7777);
 
         //TODO 3.处理数据
         //Caused by: org.apache.flink.api.common.functions.InvalidTypesException: The generic type parameters of 'Collector' are missing.
