@@ -2,6 +2,7 @@ package cn.edu.ustb.wordCount;
 
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
@@ -13,7 +14,10 @@ public class WordCount03_DealWithSocket {
     public static void main(String[] args) {
         //TODO 1.创建执行环境
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(env.getParallelism());
+        //idea运行时也可以看到Web UI，一般用于测试
+        //需要引入依赖：flink-runtime-web
+        //final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        //env.setParallelism(4);
 
         //TODO 2.读取数据流
         final DataStreamSource<String> socketDS = env.socketTextStream("Hadoop132", 7777);
@@ -31,6 +35,7 @@ public class WordCount03_DealWithSocket {
                         out.collect(wordTuple2);
                     }
                 })
+                //.setParallelism(2)
                 .returns(Types.TUPLE(Types.STRING,Types.INT))
                 .keyBy((Tuple2<String, Integer> value) -> value.f0)
                 .reduce((tuple1, tuple2) -> new Tuple2<>(tuple1.f0, tuple1.f1 + tuple2.f1))
