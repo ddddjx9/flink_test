@@ -2,7 +2,6 @@ package cn.edu.ustb.wordCount;
 
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
@@ -38,7 +37,7 @@ public class WordCount03_DealWithSocket {
                 //.setParallelism(2)
                 .returns(Types.TUPLE(Types.STRING,Types.INT))
                 .keyBy((Tuple2<String, Integer> value) -> value.f0)
-                .reduce((tuple1, tuple2) -> new Tuple2<>(tuple1.f0, tuple1.f1 + tuple2.f1))
+                .sum(1)
                 .print();
 
         //TODO 5.执行
