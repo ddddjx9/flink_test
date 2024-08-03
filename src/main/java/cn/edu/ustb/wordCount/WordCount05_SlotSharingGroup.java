@@ -13,7 +13,7 @@ public class WordCount05_SlotSharingGroup {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
 
         //全局禁用算子链
-        //env.disableOperatorChaining();
+        //executionEnv.disableOperatorChaining();
         env.socketTextStream("localhost", 8888)
                 .flatMap((FlatMapFunction<String, String>) (s, collector) -> {
                     for (String word : s.split(" ")) {

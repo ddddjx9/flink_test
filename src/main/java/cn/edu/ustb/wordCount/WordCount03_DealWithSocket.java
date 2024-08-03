@@ -15,8 +15,8 @@ public class WordCount03_DealWithSocket {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         //idea运行时也可以看到Web UI，一般用于测试
         //需要引入依赖：flink-runtime-web
-        //final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
-        //env.setParallelism(4);
+        //final StreamExecutionEnvironment executionEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        //executionEnv.setParallelism(4);
 
         //TODO 2.读取数据流
         final DataStreamSource<String> socketDS = env.socketTextStream("Hadoop132", 7777);

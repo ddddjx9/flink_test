@@ -42,6 +42,12 @@
             <version>${flink.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- 引入文件连接器依赖，之前的readTextFile过时了 -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-files</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
     </dependencies>
 
     <!-- 增加打包插件的配置 -->

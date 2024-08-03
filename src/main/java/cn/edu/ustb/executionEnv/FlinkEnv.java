@@ -1,4 +1,4 @@
-package cn.edu.ustb.env;
+package cn.edu.ustb.executionEnv;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.typeinfo.Types;
