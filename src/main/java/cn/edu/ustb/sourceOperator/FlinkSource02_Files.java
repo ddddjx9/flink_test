@@ -17,7 +17,6 @@ public class FlinkSource02_Files {
         env.fromSource(source, WatermarkStrategy.noWatermarks(), "fileSource")
                 .print();
 
-
         try {
             env.execute();
         } catch (Exception e) {
