@@ -1,6 +1,7 @@
 package cn.edu.ustb.wordCount;
 
-import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -35,7 +36,13 @@ public class WordCount03_DealWithSocket {
                     }
                 })
                 //.setParallelism(2)
-                .returns(Types.TUPLE(Types.STRING,Types.INT))
+                //.returns(Types.TUPLE(Types.STRING,Types.INT))
+                .returns(new TypeHint<Tuple2<String, Integer>>() {
+                    @Override
+                    public TypeInformation<Tuple2<String, Integer>> getTypeInfo() {
+                        return super.getTypeInfo();
+                    }
+                })
                 .keyBy((Tuple2<String, Integer> value) -> value.f0)
                 .sum(1)
                 .print();
