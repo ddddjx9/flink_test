@@ -1,4 +1,4 @@
-package cn.edu.ustb.transform;
+package cn.edu.ustb.transformOperator;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.functions.RuntimeContext;
@@ -6,7 +6,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-public class TransformOperator_RichFunction {
+public class TransformOperator08_RichFunction {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
@@ -27,7 +27,9 @@ public class TransformOperator_RichFunction {
 
             @Override
             public void close() throws Exception {
-                super.close();
+                RuntimeContext runtimeContext = getRuntimeContext();
+                System.out.println("子任务编号：" + runtimeContext.getIndexOfThisSubtask() +
+                        "启动，task名称为" + runtimeContext.getTaskNameWithSubtasks()+", 调用close");
             }
         }).print();
 

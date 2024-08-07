@@ -1,4 +1,4 @@
-package cn.edu.ustb.transform;
+package cn.edu.ustb.transformOperator;
 
 import cn.edu.ustb.sourceOperator.WaterSensor;
 import org.apache.flink.api.common.functions.MapFunction;
