@@ -1,4 +1,4 @@
-package cn.edu.ustb.splitStream;
+package cn.edu.ustb.transformOperator.splitStream;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;

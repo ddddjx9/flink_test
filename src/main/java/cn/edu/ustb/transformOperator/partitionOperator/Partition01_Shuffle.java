@@ -1,4 +1,4 @@
-package cn.edu.ustb.partitionOperator;
+package cn.edu.ustb.transformOperator.partitionOperator;
 
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

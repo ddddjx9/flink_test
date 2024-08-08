@@ -1,4 +1,4 @@
-package cn.edu.ustb.splitStream;
+package cn.edu.ustb.transformOperator.splitStream;
 
 import cn.edu.ustb.sourceOperator.WaterSensor;
 import org.apache.flink.api.common.typeinfo.Types;
