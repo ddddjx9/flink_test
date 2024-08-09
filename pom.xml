@@ -60,6 +60,14 @@
             <artifactId>flink-connector-datagen</artifactId>
             <version>${flink.version}</version>
         </dependency>
+        <!-- 尝试解决报错：找不到HDFS依赖 -->
+        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-shaded-hadoop-2 -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-shaded-hadoop-2</artifactId>
+            <version>2.8.3-10.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <!-- 增加打包插件的配置 -->
