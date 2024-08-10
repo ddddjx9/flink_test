@@ -34,6 +34,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
             <version>1.7.2</version>
+            <scope>provided</scope>
         </dependency>
         <!-- 引入本地测试依赖 -->
         <dependency>
@@ -47,18 +48,21 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-files</artifactId>
             <version>${flink.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- 引入与Kafka相关的依赖 -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-kafka</artifactId>
             <version>${flink.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- 导入数据生成器DataGen的依赖 -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-datagen</artifactId>
             <version>${flink.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- 尝试解决报错：找不到HDFS依赖 -->
         <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-shaded-hadoop-2 -->

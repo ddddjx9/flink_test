@@ -19,33 +19,33 @@ import java.time.ZoneId;
 
 public class Sink01_SinkToFile {
     public static void main(String[] args) {
-        System.setProperty("HADOOP_USER_NAME","root");
+        System.setProperty("HADOOP_USER_NAME", "root");
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //每个目录中，都会有并行度个数的文件 在写入
         env.setParallelism(4);
 
         DataGeneratorSource<String> source = new DataGeneratorSource<>(new GeneratorFunction<Long, String>() {
             @Override
             public String map(Long value) throws Exception {
-                return "";
+                return value + "";
             }
-        }, 100, RateLimiterStrategy.perSecond(10), Types.STRING);
+        }, Long.MAX_VALUE, RateLimiterStrategy.perSecond(10), Types.STRING);
 
         FileSink<String> fileSink = FileSink.<String>forRowFormat(new Path("hdfs://Hadoop130:8020/flinkSinkToFile"), new SimpleStringEncoder<>())
                 //输出文件的配置，如前缀或者后缀
-                .withOutputFileConfig(OutputFileConfig
-                        .builder().withPartPrefix("root")
+                .withOutputFileConfig(
+                        OutputFileConfig.builder()
+                        .withPartPrefix("root")
                         .withPartSuffix(".log")
-                        .build()
-                )
-                //按照目录分桶
+                        .build())
+                //按照目录分桶 - 每个小时一个目录
                 .withBucketAssigner(new DateTimeBucketAssigner<>("yyyy-MM-dd--HH", ZoneId.systemDefault()))
                 //文件滚动策略 - 假设指定滚动策略为10秒，那么写入达到10秒就不会再次写入了 文件最大1M
-                .withRollingPolicy(DefaultRollingPolicy
-                        .builder()
-                        .withRolloverInterval(Duration.ofSeconds(10))
-                        .withMaxPartSize(new MemorySize(1024 * 1024))
-                        .build()
-                )
+                .withRollingPolicy(
+                        DefaultRollingPolicy.builder()
+                                .withRolloverInterval(Duration.ofSeconds(10))
+                                .withMaxPartSize(new MemorySize(1024 * 1024))
+                                .build())
                 .build();
 
         env.fromSource(source, WatermarkStrategy.noWatermarks(), "sinkToFile")
