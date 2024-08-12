@@ -72,6 +72,20 @@
             <version>2.8.3-10.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- 引入与MySQL相关的依赖 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.27</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 引入flink中关于MySQL的依赖 -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-jdbc</artifactId>
+            <version>3.1.2-1.17</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <!-- 增加打包插件的配置 -->
