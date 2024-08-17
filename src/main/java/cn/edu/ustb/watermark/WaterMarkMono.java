@@ -37,13 +37,17 @@ public class WaterMarkMono {
                 .print();
 
         //TODO 在算子外部指定Watermark策略
-        WatermarkStrategy<WaterSensor> waterSensorWatermarkStrategy = WatermarkStrategy.<WaterSensor>forMonotonousTimestamps()
-                .withTimestampAssigner(new SerializableTimestampAssigner<WaterSensor>() {
-                    @Override
-                    public long extractTimestamp(WaterSensor element, long recordTimestamp) {
-                        System.out.println(element + " ,recordTs = " + recordTimestamp);
-                        return element.getTs() * 1000L;
-                    }
-                });
+        WatermarkStrategy<WaterSensor> waterSensorWatermarkStrategy =
+                WatermarkStrategy
+                        //升序的watermark策略
+                        .<WaterSensor>forMonotonousTimestamps()
+                        //指定时间戳分配器，从数据中提取
+                        .withTimestampAssigner(new SerializableTimestampAssigner<WaterSensor>() {
+                            @Override
+                            public long extractTimestamp(WaterSensor element, long recordTimestamp) {
+                                System.out.println(element + " ,recordTs = " + recordTimestamp);
+                                return element.getTs() * 1000L;
+                            }
+                        });
     }
 }
