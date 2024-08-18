@@ -13,27 +13,29 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class WaterMarkMono {
+import java.time.Duration;
+
+public class WatermarkOutOfOrderness {
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        //env.getConfig().setAutoWatermarkInterval();
 
         //TODO 在算子外部指定Watermark策略
         WatermarkStrategy<WaterSensor> waterSensorWatermarkStrategy =
                 WatermarkStrategy
-                        //升序的watermark策略
-                        .<WaterSensor>forMonotonousTimestamps()
+                        //乱序的watermark策略，需要指定等待时间 - 指定等待3s时间
+                        .<WaterSensor>forBoundedOutOfOrderness(Duration.ofSeconds(3))
                         //指定时间戳分配器，从数据中提取
-                        .withTimestampAssigner(new SerializableTimestampAssigner<WaterSensor>() {
-                            @Override
-                            public long extractTimestamp(WaterSensor element, long recordTimestamp) {
-                                System.out.println(element + " ,recordTs = " + recordTimestamp);
-                                return element.getTs() * 1000L;
-                            }
-                        });
+                        .withTimestampAssigner(
+                                (SerializableTimestampAssigner<WaterSensor>) (element, recordTimestamp) -> {
+                                    System.out.println(element + " ,recordTs = " + recordTimestamp);
+                                    return element.getTs() * 1000L;
+                                }
+                        );
 
         env.socketTextStream("localhost", 7777)
                 .map(new MyMapFunction())
-                //.assignTimestampsAndWatermarks(WatermarkStrategy.forMonotonousTimestamps())
                 .assignTimestampsAndWatermarks(waterSensorWatermarkStrategy)
                 .keyBy((KeySelector<WaterSensor, String>) WaterSensor::getId)
                 .window(TumblingProcessingTimeWindows.of(Time.seconds(10L)))
