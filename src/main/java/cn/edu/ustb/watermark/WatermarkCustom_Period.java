@@ -17,6 +17,8 @@ public class WatermarkCustom_Period {
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
+        //TODO 演示多并行度场景下的水位线的传递
+        env.setParallelism(2);
         env.socketTextStream("localhost", 7777)
                 .map(new MyMapFunction())
                 .assignTimestampsAndWatermarks(
