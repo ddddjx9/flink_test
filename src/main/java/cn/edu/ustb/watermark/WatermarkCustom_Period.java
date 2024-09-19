@@ -22,6 +22,7 @@ public class WatermarkCustom_Period {
                 .assignTimestampsAndWatermarks(
                         //TODO 指定自定义生成器
                         WatermarkStrategy
+                                //TODO 指定自定义的水位线生成器策略
                                 .<WaterSensor>forGenerator(
                                         new WatermarkGeneratorSupplier<WaterSensor>() {
                                             @Override
