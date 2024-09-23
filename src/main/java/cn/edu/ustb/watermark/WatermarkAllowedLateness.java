@@ -16,7 +16,7 @@ import org.apache.flink.util.Collector;
 
 import java.time.Duration;
 
-public class WindowAllowedLateness {
+public class WatermarkAllowedLateness {
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
