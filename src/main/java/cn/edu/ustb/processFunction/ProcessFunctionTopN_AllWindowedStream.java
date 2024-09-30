@@ -21,7 +21,7 @@ import java.util.*;
  * 最终汇总排序后输出前两名
  * </p>
  */
-public class ProcessFunctionTopN {
+public class ProcessFunctionTopN_AllWindowedStream {
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
