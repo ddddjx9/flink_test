@@ -51,16 +51,16 @@ public class ProcessFunctionTopN_AllWindowedStream {
                             }
                         }
 
-                        List<Tuple2<Integer,Integer>> result=new ArrayList<>();
+                        List<Tuple2<Integer, Integer>> result = new ArrayList<>();
                         Set<Integer> integers = vcMap.keySet();
                         for (Integer integer : integers) {
-                            result.add(new Tuple2<>(integer,vcMap.get(integer)));
+                            result.add(new Tuple2<>(integer, vcMap.get(integer)));
                         }
 
-                        result.sort((o1, o2) -> o2.f1-o1.f1);
+                        result.sort((o1, o2) -> o2.f1 - o1.f1);
 
-                        for (int i = 0; i <2; i++) {
-                            out.collect(result.get(i).f0+"水位线出现了："+result.get(i).f1+"次");
+                        for (int i = 0; i < 2; i++) {
+                            out.collect(result.get(i).f0 + "水位线出现了：" + result.get(i).f1 + "次");
                         }
                     }
                 })
