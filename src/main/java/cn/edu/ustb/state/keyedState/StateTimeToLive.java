@@ -1,27 +1,27 @@
-package cn.edu.ustb.state;
+package cn.edu.ustb.state.keyedState;
 
 import cn.edu.ustb.sourceOperator.WaterSensor;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
+import org.apache.flink.api.common.state.StateTtlConfig;
+import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.time.Duration;
-import java.util.ArrayList;
 
-public class KeyedListState {
+public class StateTimeToLive {
     public static void main(String[] args) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        SingleOutputStreamOperator<String> mainStream = env.socketTextStream("localhost", 8888)
+        env.socketTextStream("localhost", 7777)
                 .map(new MapFunction<String, WaterSensor>() {
                     @Override
                     public WaterSensor map(String value) throws Exception {
@@ -43,45 +43,38 @@ public class KeyedListState {
                 .keyBy(WaterSensor::getId)
                 .process(
                         new KeyedProcessFunction<String, WaterSensor, String>() {
-                            //TODO 定义状态，此时不进行初始化
-                            ListState<Integer> state;
+                            ValueState<Integer> state;
 
                             @Override
                             public void open(Configuration parameters) throws Exception {
-                                //TODO 在open方法中初始化状态
                                 super.open(parameters);
+
+                                //TODO 创建StateTtlConfig
+                                StateTtlConfig stateTtlConfig = StateTtlConfig.newBuilder(Time.seconds(5))
+                                        .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
+                                        .setStateVisibility(StateTtlConfig.StateVisibility.NeverReturnExpired)
+                                        .build();
+
+                                //TODO 状态描述器启用Ttl
+                                ValueStateDescriptor<Integer> valueStateDescriptor = new ValueStateDescriptor<>("lastValueState", Types.INT);
+                                valueStateDescriptor.enableTimeToLive(stateTtlConfig);
+
                                 //TODO 通过运行时上下文获取状态，通过状态描述器定义状态
-                                state = getRuntimeContext().getListState(new ListStateDescriptor<>("listState", Types.INT));
+                                state = getRuntimeContext().getState(valueStateDescriptor);
                             }
 
                             @Override
                             public void processElement(WaterSensor value, KeyedProcessFunction<String, WaterSensor, String>.Context ctx, Collector<String> out) throws Exception {
-                                //TODO 来一条，存一条
-                                state.add(value.getVc());
-                                Iterable<Integer> iterator = state.get();
+                                //先获取上一条的状态值进行打印
+                                System.out.println(state != null ? state.value() : null);
 
-                                //TODO 从迭代器中拿出来，拷贝到list中，只留三个最大的
-                                ArrayList<Integer> list = new ArrayList<>();
-                                for (Integer i : iterator) {
-                                    list.add(i);
-                                }
-
-                                //TODO 降序排序
-                                list.sort((o1, o2) -> o2 - o1);
-
-                                //TODO 只保留最大的三个
-                                if (list.size() > 3) {
-                                    list.remove(3);
-                                }
-
-                                out.collect("传感器id为："+value.getId()+"，最大的三个水位值 = "+ list);
-
-                                //TODO 更新list状态
-                                state.update(list);
+                                //更新状态值，顺便查看状态生存周期
+                                state.update(value.getVc());
+                                out.collect(value.toString());
                             }
-                        });
+                        })
+                .print();
 
-        mainStream.print();
 
         try {
             env.execute();

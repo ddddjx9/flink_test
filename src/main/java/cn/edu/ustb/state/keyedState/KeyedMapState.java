@@ -1,4 +1,4 @@
-package cn.edu.ustb.state;
+package cn.edu.ustb.state.keyedState;
 
 import cn.edu.ustb.sourceOperator.WaterSensor;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
@@ -8,7 +8,6 @@ import org.apache.flink.api.common.state.MapState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
@@ -21,7 +20,7 @@ public class KeyedMapState {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        SingleOutputStreamOperator<String> mainStream = env.socketTextStream("localhost", 8888)
+        env.socketTextStream("localhost", 8888)
                 .map((MapFunction<String, WaterSensor>) value -> {
                     String[] split = value.split(" ");
                     return new WaterSensor(split[0], Long.parseLong(split[1]), Integer.parseInt(split[2]));
@@ -68,9 +67,8 @@ public class KeyedMapState {
 
                                 out.collect(sb.toString());
                             }
-                        });
-
-        mainStream.print();
+                        })
+                .print();
 
         try {
             env.execute();
