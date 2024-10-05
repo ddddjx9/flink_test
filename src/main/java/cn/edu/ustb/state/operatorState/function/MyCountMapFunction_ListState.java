@@ -32,7 +32,7 @@ public class MyCountMapFunction_ListState implements MapFunction<String, Long>, 
         System.out.println("snapshotState...");
         //TODO 清空算子状态
         state.clear();
-        //TODO 将本地变量添加到算子状态中
+        //TODO 将本地变量添加到算子状态中，更新算子状态
         state.add(count);
     }
 
