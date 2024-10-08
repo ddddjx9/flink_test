@@ -86,6 +86,13 @@
             <version>3.1.2-1.17</version>
             <scope>provided</scope>
         </dependency>
+        <!-- 需要注意，如果想在IDE中使用EmbeddedRocksDBStateBackend，需要为Flink项目添加依赖：-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-statebackend-rocksdb</artifactId>
+            <version>${flink.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- 排序某日志文件配置，要不然一直出问题 -->
         <dependency>
             <groupId>org.apache.flink</groupId>
