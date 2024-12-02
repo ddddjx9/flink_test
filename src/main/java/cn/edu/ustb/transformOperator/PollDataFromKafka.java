@@ -1,4 +1,4 @@
-package cn.edu.ustb.kafkaSource;
+package cn.edu.ustb.transformOperator;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -14,6 +14,7 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
@@ -53,7 +54,7 @@ public class PollDataFromKafka {
                     }
                 })
                 .keyBy(value -> "1")
-                .window(SlidingProcessingTimeWindows.of(Duration.ofSeconds(5), Duration.ofSeconds(3)))
+                .window(SlidingProcessingTimeWindows.of(Time.seconds(5), Time.seconds(3)))
                 .process(new ProcessWindowFunction<Tuple2<String, Integer>, String, String, TimeWindow>() {
                     @Override
                     public void process(String s, ProcessWindowFunction<Tuple2<String, Integer>, String, String, TimeWindow>.Context context, Iterable<Tuple2<String, Integer>> elements, Collector<String> out) throws Exception {
