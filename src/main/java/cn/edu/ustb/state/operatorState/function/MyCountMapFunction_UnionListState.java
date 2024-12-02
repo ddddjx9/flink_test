@@ -8,7 +8,7 @@ import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 
-//TODO 实现CheckpointedFunction接口
+//TODO 实现CheckPointedFunction接口
 public class MyCountMapFunction_UnionListState implements MapFunction<String,Long>, CheckpointedFunction {
     //TODO 如果定义在富函数中，需要在open方法中进行初始化
     private Long count = 0L;
