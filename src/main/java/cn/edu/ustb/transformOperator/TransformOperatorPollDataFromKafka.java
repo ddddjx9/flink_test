@@ -22,7 +22,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PollDataFromKafka {
+public class TransformOperatorPollDataFromKafka {
     public static void main(String[] args) {
         // 获取flink环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
