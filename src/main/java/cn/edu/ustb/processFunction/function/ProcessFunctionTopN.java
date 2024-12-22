@@ -22,7 +22,7 @@ public class ProcessFunctionTopN extends KeyedProcessFunction<Long, Tuple3<Integ
 
         // TODO 进入这个方法里面的仅为一条数据，因为process函数仅能处理一条数据，如果想要排序，得存起来一块排序
         if (map.containsKey(value.f2)) {
-            //如果不是第一条数据
+            // 如果不是第一条数据
             List<Tuple3<Integer, Integer, Long>> result = map.get(value.f2);
             result.add(value);
         } else {
@@ -31,6 +31,7 @@ public class ProcessFunctionTopN extends KeyedProcessFunction<Long, Tuple3<Integ
             map.put(value.f2, result);
         }
 
+        // 注册事件时间，相当于闹钟，定点启动
         ctx.timerService().registerEventTimeTimer(value.f2 + 1);
     }
 
