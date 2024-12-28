@@ -19,7 +19,6 @@ public class CheckpointChangeLog {
         env.enableCheckpointing(5000, CheckpointingMode.EXACTLY_ONCE);
         env.enableChangelogStateBackend(true);
 
-
         //TODO 开启非barrier对齐策略
         // 开启之后，自动设置为精准一次，并发为1
         CheckpointConfig checkpointConfig = env.getCheckpointConfig();
